@@ -19,7 +19,7 @@ def list_assets():
 def download_asset(filename):
     """Download a specific file."""
     try:
-        return "Not Available yet"
+        return jsonify({"error": "Not Implemented"}), 501  
         # return send_from_directory(DOWNLOAD_FOLDER, filename, as_attachment=True)
     except Exception as e:
         return jsonify({"error": str(e)}), 404
