@@ -3,6 +3,10 @@ from backend.app.database import get_db
 
 class User:
     def __init__(self, user_id, username, email, specialties):
+        if not username or not isinstance(username, str) or username.strip() == '':
+            raise ValueError("Username is required and must be a non-empty string")
+        if not email or not isinstance(email, str) or email.strip() == '':
+            raise ValueError("Email is required and must be a non-empty string")
         self.user_id = user_id
         self.username = username
         self.email = email
