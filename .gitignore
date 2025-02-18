@@ -53,3 +53,8 @@ Thumbs.db
 
 # Project specific
 hosting-options.md
+
+.coveragerc
+coverage_html/
+wtus_team_system.db
+.coverage
