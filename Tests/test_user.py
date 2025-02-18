@@ -58,10 +58,6 @@ class TestUser(unittest.TestCase):
         with self.assertRaises(sqlite3.InterfaceError):
             User.get_by_id('invalid_id')  # Passing a string instead of an integer
 
-    def test_get_user_by_id_invalid_type(self):
-        with self.assertRaises(sqlite3.InterfaceError):
-            User.get_by_id('invalid_id')  # Passing a string instead of an integer
-
     def test_get_user_by_id_none(self):
         with self.assertRaises(sqlite3.InterfaceError):
             User.get_by_id(None)  # Passing None instead of an integer
