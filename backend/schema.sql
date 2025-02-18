@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS tasks (
 
 CREATE TABLE IF NOT EXISTS schedules (
     schedule_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
+    user_id INTEGER NOT NULL,
     time_slot TEXT,
     FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
