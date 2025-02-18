@@ -1,5 +1,6 @@
 import coverage
 import unittest
+import sys
 
 def run_tests():
     # Start coverage tracking
@@ -10,7 +11,9 @@ def run_tests():
     loader = unittest.TestLoader()
     tests = loader.discover('Tests')
     runner = unittest.TextTestRunner()
-    result = runner.run(tests)
+    test_result = runner.run(tests)
+    if not test_result.wasSuccessful():
+        sys.exit(1)
 
     # Stop coverage tracking
     cov.stop()
