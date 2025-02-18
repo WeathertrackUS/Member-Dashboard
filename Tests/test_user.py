@@ -113,6 +113,110 @@ class TestUser(unittest.TestCase):
         with self.assertRaises(ValueError):
             User(1, "testuser", 123, ["python"])
 
+    def test_update_specialties_success(self):
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        user.specialties.append('django')
+        user._update_specialties()
+        fetched_user = User.get_by_id(user.user_id)
+        self.assertEqual(fetched_user.specialties, ['python', 'django'])
+
+    def test_update_specialties_empty_list(self):
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        user.specialties = []
+        user._update_specialties()
+        fetched_user = User.get_by_id(user.user_id)
+        self.assertEqual(fetched_user.specialties, [''])
+
+    def test_update_specialties_invalid_data(self):
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        user.specialties = None
+        with self.assertRaises(TypeError):
+            user._update_specialties()
+
+    def test_update_specialties_special_chars(self):
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        user.specialties = ['python!@#', 'django$%^']
+        user._update_specialties()
+        fetched_user = User.get_by_id(user.user_id)
+        self.assertEqual(fetched_user.specialties, ['python!@#', 'django$%^'])
+
+    def test_update_specialties_very_long_specialty(self):
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        long_specialty = 'x' * 1000
+        user.specialties = [long_specialty]
+        user._update_specialties()
+        fetched_user = User.get_by_id(user.user_id)
+        self.assertEqual(fetched_user.specialties, [long_specialty])
+
+    def test_update_specialties_with_commas(self):
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        user.specialties = ['python,django', 'flask,fastapi']
+        user._update_specialties()
+        fetched_user = User.get_by_id(user.user_id)
+        self.assertEqual(fetched_user.specialties, ['python', 'django', 'flask', 'fastapi'])
+
+    def test_update_specialties_after_user_deletion(self):
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        user_id = user.user_id
+        self.db.execute('DELETE FROM users WHERE user_id = ?', (user_id,))
+        self.db.commit()
+        with self.assertRaises(RuntimeError):
+            user._update_specialties()
+
+    def test_update_specialties_sqlite_error(self):
+        """Test _update_specialties handles SQLite errors correctly"""
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        
+        # Force a SQLite error by modifying the table structure temporarily
+        self.db.execute('ALTER TABLE users RENAME COLUMN specialties TO temp_specialties')
+        self.db.commit()
+        
+        try:
+            with self.assertRaises(RuntimeError) as cm:
+                user._update_specialties()
+            self.assertIn("Failed to update specialties", str(cm.exception))
+            
+            # Verify the transaction was rolled back by checking the data is unchanged
+            self.db.execute('ALTER TABLE users RENAME COLUMN temp_specialties TO specialties')
+            self.db.commit()
+            fetched_user = User.get_by_id(user.user_id)
+            self.assertEqual(fetched_user.specialties, ['python'])
+            
+        finally:
+            # Clean up in case test fails
+            try:
+                self.db.execute('ALTER TABLE users RENAME COLUMN temp_specialties TO specialties')
+                self.db.commit()
+            except:
+                pass
+    
+    def test_add_specialty_empty_string(self):
+        """Test that adding an empty specialty raises ValueError"""
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        with self.assertRaises(ValueError) as cm:
+            user.add_specialty('')
+        self.assertEqual(str(cm.exception), "Specialty cannot be empty")
+
+    def test_add_specialty_none(self):
+        """Test that adding None as specialty raises ValueError"""
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        with self.assertRaises(ValueError) as cm:
+            user.add_specialty(None)
+        self.assertEqual(str(cm.exception), "Specialty cannot be empty")
+
+    def test_remove_specialty_empty_string(self):
+        """Test that removing an empty specialty raises ValueError"""
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        with self.assertRaises(ValueError) as cm:
+            user.remove_specialty('')
+        self.assertEqual(str(cm.exception), "Specialty cannot be empty")
+
+    def test_remove_specialty_none(self):
+        """Test that removing None as specialty raises ValueError"""
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        with self.assertRaises(ValueError) as cm:
+            user.remove_specialty(None)
+        self.assertEqual(str(cm.exception), "Specialty cannot be empty")
 
 if __name__ == '__main__':
     unittest.main()

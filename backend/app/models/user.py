@@ -50,27 +50,36 @@ class User:
         db.commit()
         self.email = new_email
 
+    def _update_specialties(self):
+        """Helper method to update specialties in database."""
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute('SELECT 1 FROM users WHERE user_id = ?', (self.user_id,))
+        if cursor.fetchone() is None:
+            raise RuntimeError(f"User with user_id {self.user_id} does not exist")
+        try:
+            cursor.execute(
+                'UPDATE users SET specialties = ? WHERE user_id = ?',
+                (','.join(self.specialties), self.user_id)
+            )
+            db.commit()
+        except sqlite3.Error as e:
+            db.rollback()
+            raise RuntimeError(f"Failed to update specialties: {str(e)}")
+
     def add_specialty(self, specialty):
+        if not specialty or specialty == '':
+            raise ValueError("Specialty cannot be empty")
         if specialty not in self.specialties:
             self.specialties.append(specialty)
-            db = get_db()
-            cursor = db.cursor()
-            cursor.execute(
-                'UPDATE users SET specialties = ? WHERE user_id = ?',
-                (','.join(self.specialties), self.user_id)
-            )
-            db.commit()
+            self._update_specialties()
 
     def remove_specialty(self, specialty):
+        if not specialty or specialty == '':
+            raise ValueError("Specialty cannot be empty")
         if specialty in self.specialties:
             self.specialties.remove(specialty)
-            db = get_db()
-            cursor = db.cursor()
-            cursor.execute(
-                'UPDATE users SET specialties = ? WHERE user_id = ?',
-                (','.join(self.specialties), self.user_id)
-            )
-            db.commit()
+            self._update_specialties()
 
     def __repr__(self):
         return f"<User {self.username}>"
