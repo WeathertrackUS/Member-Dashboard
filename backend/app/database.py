@@ -4,6 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def get_db(db_path='wtus_team_system.db'):
     """Get a connection to the SQLite database.
 

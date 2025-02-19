@@ -48,7 +48,7 @@ class User:
 
             if not isinstance(specialties, list or str):
                 raise TypeError("Specialties must ba a list or string")
-            if any (not isinstance(s, str) or not s.strip() for s in specialties):
+            if any(not isinstance(s, str) or not s.strip() for s in specialties):
                 raise ValueError("All specialties must be a non-empty string")
 
             cursor.execute(
