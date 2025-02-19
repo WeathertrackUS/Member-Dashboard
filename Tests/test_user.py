@@ -278,7 +278,6 @@ class TestUser(unittest.TestCase):
             'invalid@dom..com',
         ]
         for email in invalid_emails:
-            print(email)
             with self.assertRaises(ValueError) as cm:
                 User(1, "testuser", email, ["python"])
             self.assertEqual(str(cm.exception), "Invalid email format")

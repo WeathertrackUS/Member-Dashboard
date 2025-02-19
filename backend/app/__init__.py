@@ -3,6 +3,7 @@ from flask_cors import CORS
 from backend.config import Config
 from backend.app.database import db_connection
 import logging
+import os
 
 logging.basicConfig(
     level=logging.INFO,
@@ -12,7 +13,7 @@ logging.basicConfig(
 
 
 def create_app():
-    """Create a new Flask application and initialize the database.
+    """Create a new Flask application and initialize the database if it doesn't exist.
 
     Returns:
         app: A new Flask application.
@@ -23,6 +24,12 @@ def create_app():
     # Enable CORS
     CORS(app)
     app.config.from_object(Config)
+
+    debug_mode = os.getenv('FLASK_ENV')
+    if debug_mode == 'development':
+        app.debug = True
+    elif debug_mode == 'production':
+        app.debug = False
 
     # Initialize database only if it doesn't exist
     with app.app_context(), db_connection() as db:
@@ -79,10 +86,10 @@ def create_app():
         return jsonify({'error': 'Internal server error'}), 500
 
     # Register blueprints
-    from app.auth.routes import auth_bp
-    from app.routes.assets import assets_bp
-    from app.routes.schedule import schedule_bp
-    from app.routes.tasks import tasks_bp
+    from backend.app.auth.routes import auth_bp
+    from backend.app.routes.assets import assets_bp
+    from backend.app.routes.schedule import schedule_bp
+    from backend.app.routes.tasks import tasks_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(assets_bp)

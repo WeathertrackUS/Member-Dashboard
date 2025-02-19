@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from ..models.schedule import Schedule
+from backend.app.models.schedule import Schedule
 
 schedule_bp = Blueprint('schedule', __name__)
 
