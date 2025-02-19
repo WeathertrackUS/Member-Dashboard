@@ -54,8 +54,7 @@ class User:
             if not all(isinstance(s, str) and s.strip() for s in specialties):
                 raise ValueError("All specialties must be non-empty strings")
             return [s.strip() for s in specialties]
-        else:
-            raise TypeError("Specialties must be a list or string")
+        raise TypeError("Specialties must be a list or string")
 
     @staticmethod
     def create(username, email, specialties):
@@ -76,7 +75,7 @@ class User:
             cursor = db.cursor()
             # Check if username or email already exists
             cursor.execute('SELECT 1 FROM users WHERE LOWER(username) = LOWER(?) OR LOWER(email) = LOWER(?)',
-                         (username, email))
+                           (username, email))
             if cursor.fetchone():
                 raise ValueError("Username or email already exists")
 
