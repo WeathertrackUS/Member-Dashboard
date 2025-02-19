@@ -28,9 +28,13 @@ def run_tests():
 
     logger.info("Starting test run")
 
-    # Start coverage tracking
-    cov = coverage.Coverage()
-    cov.start()
+    try:
+        # Start coverage tracking
+        cov = coverage.Coverage()
+        cov.start()
+    except coverage.CoverageExcpetion as e:
+        logger.error("Failed to start coverage tracking: %s", str(e))
+        sys.exit(1)
 
     # Discover and run tests
     loader = unittest.TestLoader()
@@ -40,16 +44,20 @@ def run_tests():
     if not test_result.wasSuccessful():
         sys.exit(1)
 
-    # Stop coverage tracking
-    cov.stop()
-    cov.save()
+    try:
+        # Stop coverage tracking
+        cov.stop()
+        cov.save()
 
-    # Generate coverage report
-    cov.report()
-    # Generate HTML report
-    cov.html_report(directory='coverage_html')
-    # Generate XML report for CI
-    cov.xml_report()
+        # Generate coverage report
+        cov.report()
+        # Generate HTML report
+        cov.html_report(directory='coverage_html')
+        # Generate XML report for CI
+        cov.xml_report()
+    except coverage.CoverageException as e:
+        logger.error("Failed to generate coverage report: %s", str(e))
+        sys.exit(1)
 
     logger.info("Test run completed. Success: %s", test_result.wasSuccessful())
 
