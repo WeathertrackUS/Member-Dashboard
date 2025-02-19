@@ -4,6 +4,9 @@ from backend.app.database import get_db
 import sqlite3
 
 class TestUser(unittest.TestCase):
+    def __init__(self):
+        self.db = None
+
     def setUp(self):
         with get_db() as self.db:
             # Drop table if exists to ensure clean state
