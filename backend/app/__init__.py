@@ -27,14 +27,14 @@ def create_app():
     # Initialize database only if it doesn't exist
     with app.app_context(), db_connection() as db:
             cursor = db.cursor()
-            
+
             # Check if any tables exist
             cursor.execute("""
                 SELECT name FROM sqlite_master 
                 WHERE type='table' AND name='users'
             """)
             table_exists = cursor.fetchone() is not None
-            
+
             # Create tables only if they don't exist
             if not table_exists:
                 with app.open_resource('../schema.sql', mode='r') as f:

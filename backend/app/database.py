@@ -16,7 +16,7 @@ def get_db():
 @contextmanager
 def db_connection():
     """Context manager for database connections.
-    
+
     Yields:
         conn: A connection to the SQLite database.
     """
