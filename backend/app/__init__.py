@@ -5,13 +5,6 @@ from backend.app.database import db_connection
 import logging
 import os
 
-logging.basicConfig(
-    level=logging.INFO,
-    filename='app.log',
-    format='Routing - %(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-
-
 def create_app():
     """Create a new Flask application and initialize the database if it doesn't exist.
 
@@ -24,6 +17,10 @@ def create_app():
     # Enable CORS
     CORS(app)
     app.config.from_object(Config)
+
+    # Configure logging for the main application
+    Config.configure_logging('Flask-App')
+    logger = logging.getLogger(__name__)
 
     debug_mode = os.getenv('FLASK_ENV')
     if debug_mode == 'development':
@@ -70,7 +67,7 @@ def create_app():
         Returns:
             json: A JSON response with an error message.
         """
-        logging.error("Error 404: %s", error)
+        logger.error("404 Error: %s", error)
         return jsonify({'error': 'Not found'}), 404
 
     @app.errorhandler(500)
@@ -83,7 +80,7 @@ def create_app():
         Returns:
             json: A JSON response with an error message.
         """
-        logging.error("Error 500: %s", error)
+        logger.error("500 Error: %s", error)
         return jsonify({'error': 'Internal server error'}), 500
 
     # Register blueprints

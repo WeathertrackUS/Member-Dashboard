@@ -1,7 +1,10 @@
 import sqlite3
 from contextlib import contextmanager
 import logging
+from backend.config import Config
 
+# Configure logging for database operations
+Config.configure_logging('Database')
 logger = logging.getLogger(__name__)
 
 

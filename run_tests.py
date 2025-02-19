@@ -1,6 +1,8 @@
 import coverage
 import unittest
 import sys
+from backend.config import Config
+import logging
 
 
 def run_tests():
@@ -20,6 +22,12 @@ def run_tests():
         - HTML coverage report is generated in 'coverage_html' directory
         - Requires the 'coverage' module to be installed
     """
+    # Configure logging for tests
+    Config.configure_logging('Tests')
+    logger = logging.getLogger(__name__)
+
+    logger.info("Starting test run")
+
     # Start coverage tracking
     cov = coverage.Coverage()
     cov.start()
@@ -40,6 +48,8 @@ def run_tests():
     cov.report()
     # Generate HTML report
     cov.html_report(directory='coverage_html')
+
+    logger.info("Test run completed. Success: %s", test_result.wasSuccessful())
 
 
 if __name__ == '__main__':
