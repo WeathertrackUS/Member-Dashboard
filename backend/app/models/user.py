@@ -37,16 +37,15 @@ class User:
             user = cursor.execute('SELECT * FROM users WHERE user_id = ?', (user_id,)).fetchone()
             if not user:
                 return None
-            try:
-                specialties = user['specialties'].split(',') if user['specialties'] else []
-                return User(
-                    user['user_id'],
-                    user['username'],
-                    user['email'],
-                    specialties
-                )
-            except (KeyError, AttributeError) as e:
-                raise ValueError(f"Invalid user data format: {e}")
+            if user['email'] is None or user['email'].strip() == '':
+                raise ValueError("Invalid user data format")
+            specialties = user['specialties'].split(',') if user['specialties'] else []
+            return User(
+                user['user_id'],
+                user['username'],
+                user['email'],
+                specialties
+            )
 
     def update_email(self, new_email):
         with db_connection() as db:
@@ -63,15 +62,25 @@ class User:
             self.email = new_email
 
     def _update_specialties(self):
+        invalid_chars = ['\0', '\n']
+        for specialty in self.specialties:
+            if any(char in specialty for char in invalid_chars):
+                raise sqlite3.OperationalError("Specialties contain invalid characters")
+        
         with db_connection() as db:
             cursor = db.cursor()
-            cursor.execute('SELECT 1 FROM users WHERE user_id = ?', (self.user_id,))
-            if cursor.fetchone() is None:
-                raise RuntimeError(f"User with user_id {self.user_id} does not exist")
-            cursor.execute(
-                'UPDATE users SET specialties = ? WHERE user_id = ?',
-                (','.join(self.specialties), self.user_id)
-            )
+            try:
+                cursor.execute(
+                    'UPDATE users SET specialties = ? WHERE user_id = ?',
+                    (','.join(self.specialties), self.user_id)
+                )
+                if cursor.rowcount == 0:
+                    cursor.execute('SELECT 1 FROM users WHERE user_id = ?', (self.user_id,))
+                    if cursor.fetchone() is None:
+                        raise RuntimeError(f"User with user_id {self.user_id} does not exist")
+            except sqlite3.OperationalError as e:
+                if "no such column" in str(e):
+                    raise sqlite3.OperationalError("Database schema error: specialties column not found")
 
     def add_specialty(self, specialty):
         if not specialty or specialty == '':

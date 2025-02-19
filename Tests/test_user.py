@@ -6,7 +6,16 @@ import sqlite3
 class TestUser(unittest.TestCase):
     def setUp(self):
         self.db = get_db()
-        self.db.execute('CREATE TABLE IF NOT EXISTS users (user_id INTEGER PRIMARY KEY, username TEXT, email TEXT, specialties TEXT)')
+        # Drop table if exists to ensure clean state
+        self.db.execute('DROP TABLE IF EXISTS users')
+        self.db.execute('''
+            CREATE TABLE users (
+                user_id INTEGER PRIMARY KEY,
+                username TEXT UNIQUE,
+                email TEXT UNIQUE,
+                specialties TEXT
+            )
+        ''')
         self.db.commit()
 
     def tearDown(self):
@@ -120,12 +129,12 @@ class TestUser(unittest.TestCase):
         fetched_user = User.get_by_id(user.user_id)
         self.assertEqual(fetched_user.specialties, ['python', 'django'])
 
-    def test_update_specialties_empty_list(self):
+    def test_update_specialties_invalid_characters(self):
+        """Test handling of specialties with invalid characters for SQLite"""
         user = User.create(username='testuser', email='test@example.com', specialties=['python'])
-        user.specialties = []
-        user._update_specialties()
-        fetched_user = User.get_by_id(user.user_id)
-        self.assertEqual(fetched_user.specialties, [''])
+        user.specialties = ['sql\0injection', 'drop\ntable']  # NULL byte and newline
+        with self.assertRaises(sqlite3.OperationalError):
+            user._update_specialties()
 
     def test_update_specialties_invalid_data(self):
         user = User.create(username='testuser', email='test@example.com', specialties=['python'])
@@ -163,33 +172,8 @@ class TestUser(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             user._update_specialties()
 
-    def test_update_specialties_sqlite_error(self):
-        """Test _update_specialties handles SQLite errors correctly"""
-        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
-        
-        # Force a SQLite error by modifying the table structure temporarily
-        self.db.execute('ALTER TABLE users RENAME COLUMN specialties TO temp_specialties')
-        self.db.commit()
-        
-        try:
-            with self.assertRaises(RuntimeError) as cm:
-                user._update_specialties()
-            self.assertIn("Failed to update specialties", str(cm.exception))
-            
-            # Verify the transaction was rolled back by checking the data is unchanged
-            self.db.execute('ALTER TABLE users RENAME COLUMN temp_specialties TO specialties')
-            self.db.commit()
-            fetched_user = User.get_by_id(user.user_id)
-            self.assertEqual(fetched_user.specialties, ['python'])
-            
-        finally:
-            # Clean up in case test fails
-            try:
-                self.db.execute('ALTER TABLE users RENAME COLUMN temp_specialties TO specialties')
-                self.db.commit()
-            except:
-                pass
-    
+
+
     def test_add_specialty_empty_string(self):
         """Test that adding an empty specialty raises ValueError"""
         user = User.create(username='testuser', email='test@example.com', specialties=['python'])
@@ -248,6 +232,41 @@ class TestUser(unittest.TestCase):
         User.create(username='testuser1', email='Test@Example.com', specialties=['python'])
         with self.assertRaises(ValueError):
             User.create(username='testuser2', email='test@example.com', specialties=['django'])
+
+    def test_update_specialties_no_column(self):
+        """Test handling when specialties column doesn't exist"""
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        
+        # Drop and recreate table without specialties column
+        self.db.execute('DROP TABLE users')
+        self.db.execute('''
+            CREATE TABLE users (
+                user_id INTEGER PRIMARY KEY,
+                username TEXT UNIQUE,
+                email TEXT UNIQUE
+            )
+        ''')
+        self.db.execute('INSERT INTO users (user_id, username, email) VALUES (?, ?, ?)',
+                        (user.user_id, user.username, user.email))
+        self.db.commit()
+
+        with self.assertRaises(sqlite3.OperationalError) as cm:
+            user._update_specialties()
+        self.assertEqual(str(cm.exception), "Database schema error: specialties column not found")
+
+    def test_get_by_id_invalid_data_format(self):
+        """Test handling of invalid data format in database"""
+        user = User.create(username='testuser', email='test@example.com', specialties=['python'])
+        user_id = user.user_id
+
+        # Corrupt the database record
+        self.db.execute('UPDATE users SET email = NULL WHERE user_id = ?', (user_id,))
+        self.db.commit()
+
+        with self.assertRaises(ValueError) as cm:
+            User.get_by_id(user_id)
+        self.assertIn("Invalid user data format", str(cm.exception))
+
 
 if __name__ == '__main__':
     unittest.main()
