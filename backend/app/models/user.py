@@ -16,6 +16,11 @@ class User:
     def create(username, email, specialties):
         with db_connection() as db:
             cursor = db.cursor()
+            # Check if username or email already exists
+            cursor.execute('SELECT 1 FROM users WHERE LOWER(username) = LOWER(?) OR LOWER(email) = LOWER(?)', (username, email))
+            if cursor.fetchone():
+                raise ValueError("Username or email already exists")
+            
             cursor.execute(
                 'INSERT INTO users (username, email, specialties) VALUES (?, ?, ?)',
                 (username, email, ','.join(specialties))
@@ -46,6 +51,11 @@ class User:
     def update_email(self, new_email):
         with db_connection() as db:
             cursor = db.cursor()
+            # Check if the new email already exists
+            cursor.execute('SELECT 1 FROM users WHERE email = ?', (new_email,))
+            if cursor.fetchone():
+                raise ValueError("Email already exists")
+            
             cursor.execute(
                 'UPDATE users SET email = ? WHERE user_id = ?',
                 (new_email, self.user_id)

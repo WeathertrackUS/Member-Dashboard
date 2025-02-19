@@ -218,5 +218,36 @@ class TestUser(unittest.TestCase):
             user.remove_specialty(None)
         self.assertEqual(str(cm.exception), "Specialty cannot be empty")
 
+    def test_create_user_duplicate_username(self):
+        """Test that creating a user with an existing username fails"""
+        User.create(username='testuser', email='test1@example.com', specialties=['python'])
+        with self.assertRaises(ValueError):
+            User.create(username='testuser', email='test2@example.com', specialties=['django'])
+
+    def test_create_user_duplicate_email(self):
+        """Test that creating a user with an existing email fails"""
+        User.create(username='testuser1', email='test@example.com', specialties=['python'])
+        with self.assertRaises(ValueError):
+            User.create(username='testuser2', email='test@example.com', specialties=['django'])
+
+    def test_update_email_duplicate(self):
+        """Test that updating to an existing email fails"""
+        user1 = User.create(username='testuser1', email='test1@example.com', specialties=['python'])
+        User.create(username='testuser2', email='test2@example.com', specialties=['django'])
+        with self.assertRaises(ValueError):
+            user1.update_email('test2@example.com')
+
+    def test_create_user_case_insensitive_username(self):
+        """Test that usernames are case-insensitive"""
+        User.create(username='TestUser', email='test1@example.com', specialties=['python'])
+        with self.assertRaises(ValueError):
+            User.create(username='testuser', email='test2@example.com', specialties=['django'])
+
+    def test_create_user_case_insensitive_email(self):
+        """Test that emails are case-insensitive"""
+        User.create(username='testuser1', email='Test@Example.com', specialties=['python'])
+        with self.assertRaises(ValueError):
+            User.create(username='testuser2', email='test@example.com', specialties=['django'])
+
 if __name__ == '__main__':
     unittest.main()
