@@ -4,6 +4,9 @@ version = 1
 name = "javascript"
 
 [[analyzers]]
+name = "sql"
+
+[[analyzers]]
 name = "python"
 
   [analyzers.meta]
