@@ -44,7 +44,8 @@ def create_app():
 
         # Create tables only if they don't exist
         if not table_exists:
-            with app.open_resource('../schema.sql', mode='r') as f:
+            schema_path = os.path.join(os.path.dirname(__file__), '..', 'schema.sql')
+            with open(schema_path, 'r') as f:
                 cursor.executescript(f.read())
             logging.info("Database initialized with schema")
 
