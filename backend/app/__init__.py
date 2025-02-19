@@ -2,6 +2,13 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from backend.config import Config
 from backend.app.database import get_db
+import logging 
+
+logging.basicConfig(
+    level=logging.INFO,
+    filename='app.log',
+    format='Routing - %(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 def create_app():
     app = Flask(__name__)
@@ -25,10 +32,12 @@ def create_app():
     # Error handlers
     @app.errorhandler(404)
     def not_found(error):
+        logging.error(f"Error 404: {error}")
         return jsonify({'error': 'Not found'}), 404
 
     @app.errorhandler(500)
     def server_error(error):
+        logging.error(f"Error 500: {error}")
         return jsonify({'error': 'Internal server error'}), 500
 
     # Register blueprints

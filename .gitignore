@@ -58,3 +58,5 @@ hosting-options.md
 coverage_html/
 wtus_team_system.db
 .coverage
+
+app.log
