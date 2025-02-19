@@ -5,7 +5,7 @@ import sqlite3
 
 class TestUser(unittest.TestCase):
     def setUp(self):
-        with get_db() as db:
+        with get_db() as self.db:
             # Drop table if exists to ensure clean state
             self.db.execute('DROP TABLE IF EXISTS users')
             self.db.execute('''

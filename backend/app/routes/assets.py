@@ -29,7 +29,7 @@ def download_asset(filename):
         logger.error("Error downloading asset %s: %s", filename, str(e))
         if isinstance(e, FileNotFoundError):
             return jsonify({"error": "Asset directory not found"}), 404
-        elif isinstance(e, PermissionError):
+        if isinstance(e, PermissionError):
             return jsonify({"error": "Permission denied accessing assets"}), 403
         else:
             return jsonify({"error": "Internal server error"}), 500
