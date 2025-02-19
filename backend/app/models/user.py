@@ -30,14 +30,18 @@ class User:
         with db_connection() as db:
             cursor = db.cursor()
             user = cursor.execute('SELECT * FROM users WHERE user_id = ?', (user_id,)).fetchone()
-            if user:
+            if not user:
+                return None
+            try:
+                specialties = user['specialties'].split(',') if user['specialties'] else []
                 return User(
                     user['user_id'],
                     user['username'],
                     user['email'],
-                    user['specialties'].split(',')
+                    specialties
                 )
-            return None
+            except (KeyError, AttributeError) as e:
+                raise ValueError(f"Invalid user data format: {e}")
 
     def update_email(self, new_email):
         with db_connection() as db:
