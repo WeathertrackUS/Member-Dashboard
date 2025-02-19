@@ -53,7 +53,7 @@ def create_app():
         Returns:
             json: A JSON response with an error message.
         """
-        logging.error(f"Error 404: {error}")
+        logging.error("Error 404: %s", error)
         return jsonify({'error': 'Not found'}), 404
 
     @app.errorhandler(500)
@@ -66,7 +66,7 @@ def create_app():
         Returns:
             json: A JSON response with an error message.
         """
-        logging.error(f"Error 500: {error}")
+        logging.error("Error 500: %s", error)
         return jsonify({'error': 'Internal server error'}), 500
 
     # Register blueprints

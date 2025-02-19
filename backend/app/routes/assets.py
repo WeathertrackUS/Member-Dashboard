@@ -17,7 +17,7 @@ def list_assets():
         files = os.listdir(DOWNLOAD_FOLDER)
         return jsonify(files), 200
     except Exception as e:
-        logger.error(f"Error listing assets: {str(e)}")
+        logger.error("Error listing assets: %s", str(e))
         return jsonify({"error": "Internal server error"}), 500
 
 @assets_bp.route('/assets/<filename>', methods=['GET'])
@@ -26,5 +26,5 @@ def download_asset(filename):
     try:
         return jsonify({"error": "Not Implemented"}), 501
     except Exception as e:
-        logger.error(f"Error downloading asset {filename}: {str(e)}")
+        logger.error("Error downloading asset %s: %s", filename, str(e))
         return jsonify({"error": "File not found"}), 404
