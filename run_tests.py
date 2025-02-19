@@ -49,7 +49,7 @@ def run_tests():
     # Generate HTML report
     cov.html_report(directory='coverage_html')
     # Generate XML report for CI
-    cov.xml_report(directory='coverage_xml')
+    cov.xml_report()
 
     logger.info("Test run completed. Success: %s", test_result.wasSuccessful())
 
