@@ -25,8 +25,7 @@ def create_app():
     app.config.from_object(Config)
 
     # Initialize database only if it doesn't exist
-    with app.app_context():
-        with db_connection() as db:
+    with app.app_context(), db_connection() as db:
             cursor = db.cursor()
             
             # Check if any tables exist
