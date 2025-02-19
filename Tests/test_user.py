@@ -5,22 +5,23 @@ import sqlite3
 
 class TestUser(unittest.TestCase):
     def setUp(self):
-        self.db = get_db()
-        # Drop table if exists to ensure clean state
-        self.db.execute('DROP TABLE IF EXISTS users')
-        self.db.execute('''
-            CREATE TABLE users (
-                user_id INTEGER PRIMARY KEY,
-                username TEXT UNIQUE,
-                email TEXT UNIQUE,
-                specialties TEXT
-            )
-        ''')
-        self.db.commit()
+        with get_db() as db:
+            # Drop table if exists to ensure clean state
+            self.db.execute('DROP TABLE IF EXISTS users')
+            self.db.execute('''
+                CREATE TABLE users (
+                    user_id INTEGER PRIMARY KEY,
+                    username TEXT UNIQUE,
+                    email TEXT UNIQUE,
+                    specialties TEXT
+                )
+            ''')
+            self.db.commit()
 
     def tearDown(self):
-        self.db.execute('DROP TABLE users')
-        self.db.commit()
+        with get_db() as self.db:
+            self.db.execute('DROP TABLE users')
+            self.db.commit()
 
     def test_create_user(self):
         user = User.create(username='testuser', email='test@example.com', specialties=['python', 'django'])
