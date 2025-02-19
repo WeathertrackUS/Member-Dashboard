@@ -19,24 +19,24 @@ class Config:
 
         Args:
             program_name (str): Name of the program to be shown in log entries
-        
+
         Raises:
             ValueError: If LOG_LEVEL is not a valid logging level
         """
         if cls.LOG_LEVEL not in cls.ALLOWED_LOG_LEVELS:
             raise ValueError(f"Invalid log level: {cls.LOG_LEVEL}. Must be one of {cls.ALLOWED_LOG_LEVELS}")
-        
+
         log_dir = os.path.dirname(cls.LOG_FILE)
         if log_dir and not os.path.exists(log_dir):
             os.makedirs(log_dir, exist_ok=True)
-        
+
         handler = logging.handlers.RotatingFileHandler(
             cls.LOG_FILE,
             maxBytes=cls.LOG_MAX_BYTES,
             backupCount=cls.LOG_BACKUP_COUNT
         )
         handler.setFormatter(logging.Formatter(cls.LOG_FORMAT.format(program=program_name)))
-        
+
         logging.basicConfig(
             level=getattr(logging, cls.LOG_LEVEL),
             handlers=[handler]
