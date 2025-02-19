@@ -12,6 +12,13 @@ logging.basicConfig(
 
 
 def create_app():
+    """Create a new Flask application and initialize the database.
+
+    Returns:
+        app: A new Flask application.
+        json: A JSON response with an welcome message.
+        json: A JSON response with an error message (if necessary).
+    """
     app = Flask(__name__)
     # Enable CORS
     CORS(app)
@@ -28,16 +35,37 @@ def create_app():
     # Basic index route
     @app.route('/')
     def index():
+        """Basic index route.
+
+        Returns:
+            json: A JSON response with a welcome message.
+        """
         return jsonify({'message': 'Welcome to WTUS Team System API'})
 
     # Error handlers
     @app.errorhandler(404)
     def not_found(error):
+        """Error handler for 404 errors.
+
+        Args:
+            error (string): The error that occurred.
+
+        Returns:
+            json: A JSON response with an error message.
+        """
         logging.error(f"Error 404: {error}")
         return jsonify({'error': 'Not found'}), 404
 
     @app.errorhandler(500)
     def server_error(error):
+        """Error handler for 500 errors.
+
+        Args:
+            error (string): The error that occurred.
+
+        Returns:
+            json: A JSON response with an error message.
+        """
         logging.error(f"Error 500: {error}")
         return jsonify({'error': 'Internal server error'}), 500
 
