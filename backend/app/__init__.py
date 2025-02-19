@@ -8,7 +8,7 @@ def create_app():
     # Enable CORS
     CORS(app)
     app.config.from_object(Config)
-    
+
     # Initialize database
     with app.app_context():
         db = get_db()
