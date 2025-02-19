@@ -1,3 +1,4 @@
+import logging.handlers
 import os
 import logging
 
@@ -12,6 +13,9 @@ class Config:
     LOG_FILE = os.getenv('LOG_FILE', 'wtus_team_system.log')
     LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
     LOG_FORMAT = '{program} - %(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    ALLOWED_LOG_LEVELS = {'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'}
+    LOG_MAX_BYTES = 1024 * 1024
+    LOG_BACKUP_COUNT = 3
 
     @classmethod
     def configure_logging(cls, program_name):
@@ -30,7 +34,7 @@ class Config:
         if log_dir and not os.path.exists(log_dir):
             os.makedirs(log_dir, exist_ok=True)
 
-        handler = logging.handlers.RotatingFileHandler(
+        handler =  logging.handlers.RotatingFileHandler(
             cls.LOG_FILE,
             maxBytes=cls.LOG_MAX_BYTES,
             backupCount=cls.LOG_BACKUP_COUNT
