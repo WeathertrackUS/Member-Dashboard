@@ -22,6 +22,10 @@ class User:
         self.email = self._validate_email(email)
         self.user_id = user_id
         self.username = username
+        if not isinstance(specialties, (list, str)):
+            raise TypeError("Specialties must be a list or string")
+        if any(not isinstance(s, str) or not s.strip() for s in specialties):
+            raise ValueError("All specialties must be a non-empty string")
         self.specialties = specialties
 
     @staticmethod
