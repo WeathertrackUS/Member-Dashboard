@@ -31,5 +31,4 @@ def download_asset(filename):
             return jsonify({"error": "Asset directory not found"}), 404
         if isinstance(e, PermissionError):
             return jsonify({"error": "Permission denied accessing assets"}), 403
-        else:
-            return jsonify({"error": "Internal server error"}), 500
+        return jsonify({"error": "Internal server error"}), 500

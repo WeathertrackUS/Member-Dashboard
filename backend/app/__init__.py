@@ -5,6 +5,7 @@ from backend.app.database import db_connection
 import logging
 import os
 
+
 def create_app():
     """Create a new Flask application and initialize the database if it doesn't exist.
 
