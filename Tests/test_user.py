@@ -4,7 +4,8 @@ from backend.app.database import get_db
 import sqlite3
 
 class TestUser(unittest.TestCase):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.db = None
 
     def setUp(self):

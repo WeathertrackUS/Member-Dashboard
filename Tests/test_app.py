@@ -30,5 +30,10 @@ class TestApp(unittest.TestCase):
         app = create_app()
         self.assertFalse(app.debug)
 
+    def test_create_app_invalid_env(self):
+        os.environ['FLASK_ENV'] = 'invalid'
+        app = create_app()
+        self.assertFalse(app.debug)
+
 if __name__ == '__main__':
     unittest.main()
