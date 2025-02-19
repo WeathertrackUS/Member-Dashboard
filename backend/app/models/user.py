@@ -46,6 +46,7 @@ class User:
             TypeError: If specialties is not a list or string
             ValueError: If any specialty is empty or not a string
         """
+        # skipcq: PYL-R1705
         if isinstance(specialties, str):
             if not specialties.strip():
                 raise ValueError("Specialty string cannot be empty")
