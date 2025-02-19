@@ -2,6 +2,7 @@ import coverage
 import unittest
 import sys
 
+
 def run_tests():
     # Start coverage tracking
     cov = coverage.Coverage()

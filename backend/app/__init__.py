@@ -10,6 +10,7 @@ logging.basicConfig(
     format='Routing - %(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
+
 def create_app():
     app = Flask(__name__)
     # Enable CORS
