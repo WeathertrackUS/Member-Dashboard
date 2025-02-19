@@ -27,15 +27,6 @@ jobs:
     - name: Run tests
       run: python run_tests.py
 
-    - name: Upload coverage reports
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: coverage-reports
-        path: |
-          coverage_html/
-          coverage_xml/
-
     - name: DeepSource Test Coverage
       uses: deepsourcelabs/test-coverage-action@master
       with: 
