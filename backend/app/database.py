@@ -1,14 +1,16 @@
 import sqlite3
 from contextlib import contextmanager
+import logging
 
+logger = logging.getLogger(__name__)
 
-def get_db():
+def get_db(db_path='wtus_team_system.db'):
     """Get a connection to the SQLite database.
 
     Returns:
         conn: A connection to the SQLite database.
     """
-    conn = sqlite3.connect('wtus_team_system.db')
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -25,6 +27,7 @@ def db_connection():
         yield conn
         conn.commit()
     except Exception as e:
+        logger.error("Database error: %s", str(e))
         conn.rollback()
         raise e
     finally:

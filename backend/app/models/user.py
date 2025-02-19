@@ -155,7 +155,7 @@ class User:
                         raise RuntimeError(f"User with user_id {self.user_id} does not exist")
             except sqlite3.OperationalError as e:
                 if "no such column" in str(e):
-                    raise sqlite3.OperationalError("Database schema error: specialties column not found")
+                    raise sqlite3.OperationalError("Database schema error: specialties column not found") from e
 
     def add_specialty(self, specialty):
         """Add a specialty to the user's specialties.
