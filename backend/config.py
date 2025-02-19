@@ -1,5 +1,5 @@
-import logging.handlers
 import os
+import logging.handlers
 import logging
 
 class Config:
@@ -34,7 +34,7 @@ class Config:
         if log_dir and not os.path.exists(log_dir):
             os.makedirs(log_dir, exist_ok=True)
 
-        handler =  logging.handlers.RotatingFileHandler(
+        handler = logging.handlers.RotatingFileHandler(
             cls.LOG_FILE,
             maxBytes=cls.LOG_MAX_BYTES,
             backupCount=cls.LOG_BACKUP_COUNT
