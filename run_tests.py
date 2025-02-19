@@ -32,7 +32,7 @@ def run_tests():
         # Start coverage tracking
         cov = coverage.Coverage()
         cov.start()
-    except coverage.CoverageExcpetion as e:
+    except coverage.CoverageException as e:
         logger.error("Failed to start coverage tracking: %s", str(e))
         sys.exit(1)
 

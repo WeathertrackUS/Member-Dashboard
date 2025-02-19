@@ -85,14 +85,16 @@ class User:
             User: A User object representing the user with the given user_id.
         """
         if not isinstance(user_id, int):
-            raise sqlite3.InterfaceError("user_id must be an integer")
+            raise TypeError("user_id must be an integer")
         with db_connection() as db:
             cursor = db.cursor()
             user = cursor.execute('SELECT * FROM users WHERE user_id = ?', (user_id,)).fetchone()
             if not user:
-                return None
-            if user['email'] is None or user['email'].strip() == '':
-                raise ValueError("Invalid user data format")
+                raise ValueError(f"No user found with id {user_id}")
+            if not user['email'] or not user['email'].strip():
+                raise ValueError(f"User {user_id} has invalid email format")
+            if not user['username'] or not user['username'].strip():
+                raise ValueError(f"User {user_id} has invalid username format")
             specialties = user['specialties'].split(',') if user['specialties'] else []
             return User(
                 user['user_id'],
