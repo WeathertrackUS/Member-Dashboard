@@ -1,15 +1,15 @@
 import sqlite3
+import re
 from backend.app.database import db_connection
 
 class User:
     def __init__(self, user_id, username, email, specialties):
         if not username or not isinstance(username, str) or username.strip() == '':
             raise ValueError("Username is required and must be a non-empty string")
-        if not email or not isinstance(email, str) or email.strip() == '':
-            raise ValueError("Email is required and must be a non-empty string")
+        # Validate and assign email in one step, removing duplicate assignment
+        self.email = self._validate_email(email)
         self.user_id = user_id
         self.username = username
-        self.email = email
         self.specialties = specialties
 
     @staticmethod
@@ -47,7 +47,18 @@ class User:
                 specialties
             )
 
+    @staticmethod
+    def _validate_email(email):
+        if not email or not isinstance(email, str) or email.strip() == '':
+            raise ValueError("Email is required and must be a non-empty string")
+        # More strict email regex that prevents consecutive dots and other invalid patterns
+        pattern = r'^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9](\.[a-zA-Z]{2,})+$'
+        if not re.match(pattern, email):
+            raise ValueError("Invalid email format")
+        return email.strip()
+
     def update_email(self, new_email):
+        self._validate_email(new_email)  # Validate new email format
         with db_connection() as db:
             cursor = db.cursor()
             # Check if the new email already exists

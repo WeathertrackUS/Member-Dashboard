@@ -172,8 +172,6 @@ class TestUser(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             user._update_specialties()
 
-
-
     def test_add_specialty_empty_string(self):
         """Test that adding an empty specialty raises ValueError"""
         user = User.create(username='testuser', email='test@example.com', specialties=['python'])
@@ -266,6 +264,31 @@ class TestUser(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             User.get_by_id(user_id)
         self.assertIn("Invalid user data format", str(cm.exception))
+
+    def test_init_invalid_email_format(self):
+        """Test that creating a user with invalid email format fails"""
+        invalid_emails = [
+            'plainaddress',
+            '@missinglocal.com',
+            'missingatmark.com',
+            'missing.domain@',
+            'invalid@domain',
+            'invalid@.com',
+            'invalid@domain.',
+            'invalid@dom..com',
+        ]
+        for email in invalid_emails:
+            print(email)
+            with self.assertRaises(ValueError) as cm:
+                User(1, "testuser", email, ["python"])
+            self.assertEqual(str(cm.exception), "Invalid email format")
+
+    def test_update_email_invalid_format(self):
+        """Test that updating to invalid email format fails"""
+        user = User.create(username='testuser', email='valid@example.com', specialties=['python'])
+        with self.assertRaises(ValueError) as cm:
+            user.update_email('invalid.email')
+        self.assertEqual(str(cm.exception), "Invalid email format")
 
 
 if __name__ == '__main__':
