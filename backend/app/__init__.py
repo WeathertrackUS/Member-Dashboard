@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from backend.config import Config
 from backend.app.database import db_connection
-import logging 
+import logging
 
 logging.basicConfig(
     level=logging.INFO,

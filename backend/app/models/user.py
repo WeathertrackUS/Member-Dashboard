@@ -2,6 +2,7 @@ import sqlite3
 import re
 from backend.app.database import db_connection
 
+
 class User:
     def __init__(self, user_id, username, email, specialties):
         if not username or not isinstance(username, str) or username.strip() == '':
