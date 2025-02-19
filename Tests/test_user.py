@@ -65,6 +65,7 @@ class TestUser(unittest.TestCase):
         self.assertNotIn('django', fetched_user.specialties)
 
     def test_get_user_by_id_not_found(self):
+        """Test that getting a non-existent user returns None"""
         user = User.get_by_id(9999)  # Assuming 9999 is a non-existent user_id
         self.assertIsNone(user)
 

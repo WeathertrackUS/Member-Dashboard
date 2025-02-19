@@ -16,20 +16,20 @@ def create_app():
     """
     app = Flask(__name__)
     # Enable CORS
-    CORS(app, resources={
-        r"/*": {
-            "origins": Config.ALLOWED_ORIGINS,
-            "methods": ["GET", "POST", "PUT", "DELETE"],
-            "allow_headers": ["Content-Type"]
-        }
-    })
+    CORS(app)
     app.config.from_object(Config)
 
     # Configure logging for the main application
     Config.configure_logging('Flask-App')
     logger = logging.getLogger(__name__)
 
-    app.debug = os.getenv('FLASK_DEBUG', '0') == '1'
+    debug_mode = os.getenv('FLASK_DEBUG')
+    if debug_mode == '1':
+        app.debug = True
+    elif debug_mode == '0':
+        app.debug = False
+    else:
+        app.debug = False
 
     # Initialize database only if it doesn't exist
     with app.app_context(), db_connection() as db:

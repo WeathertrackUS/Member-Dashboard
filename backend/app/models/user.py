@@ -33,6 +33,31 @@ class User:
         self.specialties = specialties
 
     @staticmethod
+    def _validate_specialties(specialties):
+        """Validate specialties format.
+
+        Args:
+            specialties (string/list): The specialties to validate.
+
+        Returns:
+            list: The validated specialties as a list.
+
+        Raises:
+            TypeError: If specialties is not a list or string
+            ValueError: If any specialty is empty or not a string
+        """
+        if isinstance(specialties, str):
+            if not specialties.strip():
+                raise ValueError("Specialty string cannot be empty")
+            return [s.strip() for s in specialties.split(',') if s.strip()]
+        elif isinstance(specialties, list):
+            if not all(isinstance(s, str) and s.strip() for s in specialties):
+                raise ValueError("All specialties must be non-empty strings")
+            return [s.strip() for s in specialties]
+        else:
+            raise TypeError("Specialties must be a list or string")
+
+    @staticmethod
     def create(username, email, specialties):
         """Create a new user in the database.
 
@@ -45,56 +70,49 @@ class User:
             ValueError: Username or email already exists
 
         Returns:
-            _type_: A User object representing the new user.
+            User: A User object representing the new user.
         """
         with db_connection() as db:
             cursor = db.cursor()
             # Check if username or email already exists
-            cursor.execute('SELECT 1 FROM users WHERE LOWER(username) = LOWER(?) OR LOWER(email) = LOWER(?)', (username, email))
+            cursor.execute('SELECT 1 FROM users WHERE LOWER(username) = LOWER(?) OR LOWER(email) = LOWER(?)',
+                         (username, email))
             if cursor.fetchone():
                 raise ValueError("Username or email already exists")
 
-            if not isinstance(specialties, (list, str)):
-                raise TypeError("Specialties must be a list or string")
-            if isinstance(specialties, list):
-                if any(not isinstance(s, str) or not s.strip() for s in specialties):
-                    raise ValueError("All specialties must be non-empty strings")
-            else:  # string case
-                if not specialties.strip():
-                    raise ValueError("Specialty string cannot be empty")
+            # Validate specialties
+            validated_specialties = User._validate_specialties(specialties)
 
             cursor.execute(
                 'INSERT INTO users (username, email, specialties) VALUES (?, ?, ?)',
-                (username, email, ','.join(specialties))
+                (username, email, ','.join(validated_specialties))
             )
             user_id = cursor.lastrowid
-            return User(user_id, username, email, specialties)
+            return User(user_id, username, email, validated_specialties)
 
     @staticmethod
     def get_by_id(user_id):
-        """Get a user by user_id.
-
+        """
+        Get a user by their ID.
         Args:
-            user_id (int): The user_id of the user to retrieve.
-
-        Raises:
-            sqlite3.InterfaceError: user_id must be an integer
-            ValueError: Invalid user data format
-
+            user_id: The ID of the user to retrieve
         Returns:
-            User: A User object representing the user with the given user_id.
+            User: The user object if found, None if not found
+        Raises:
+            sqlite3.InterfaceError: If user_id is not a valid integer
+            ValueError: If user data in database is invalid
         """
         if not isinstance(user_id, int):
-            raise TypeError("user_id must be an integer")
+            raise sqlite3.InterfaceError("user_id must be an integer")
         with db_connection() as db:
             cursor = db.cursor()
             user = cursor.execute('SELECT * FROM users WHERE user_id = ?', (user_id,)).fetchone()
             if not user:
-                raise ValueError(f"No user found with id {user_id}")
+                return None
             if not user['email'] or not user['email'].strip():
-                raise ValueError(f"User {user_id} has invalid email format")
+                raise ValueError("Invalid user data format")
             if not user['username'] or not user['username'].strip():
-                raise ValueError(f"User {user_id} has invalid username format")
+                raise ValueError("Invalid user data format")
             specialties = user['specialties'].split(',') if user['specialties'] else []
             return User(
                 user['user_id'],
