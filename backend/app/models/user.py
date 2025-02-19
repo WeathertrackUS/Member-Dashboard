@@ -46,6 +46,11 @@ class User:
             if cursor.fetchone():
                 raise ValueError("Username or email already exists")
 
+            if not isinstance(specialties, list or str):
+                raise TypeError("Specialties must ba a list or string")
+            if any (not isinstance(s, str) or not s.strip() for s in specialties):
+                raise ValueError("All specialties must be a non-empty string")
+
             cursor.execute(
                 'INSERT INTO users (username, email, specialties) VALUES (?, ?, ?)',
                 (username, email, ','.join(specialties))
