@@ -24,8 +24,12 @@ class User:
         self.username = username
         if not isinstance(specialties, (list, str)):
             raise TypeError("Specialties must be a list or string")
-        if any(not isinstance(s, str) or not s.strip() for s in specialties):
-            raise ValueError("All specialties must be a non-empty string")
+        if isinstance(specialties, list):
+            if any(not isinstance(s, str) or not s.strip() for s in specialties):
+                raise ValueError("All specialties must be non-empty strings")
+        else:  # string case
+            if not specialties.strip():
+                raise ValueError("Specialty string cannot be empty")
         self.specialties = specialties
 
     @staticmethod
@@ -50,10 +54,14 @@ class User:
             if cursor.fetchone():
                 raise ValueError("Username or email already exists")
 
-            if not isinstance(specialties, list or str):
-                raise TypeError("Specialties must be list or string")
-            if any(not isinstance(s, str) or not s.strip() for s in specialties):
-                raise ValueError("All specialties must be a non-empty string")
+            if not isinstance(specialties, (list, str)):
+                raise TypeError("Specialties must be a list or string")
+            if isinstance(specialties, list):
+                if any(not isinstance(s, str) or not s.strip() for s in specialties):
+                    raise ValueError("All specialties must be non-empty strings")
+            else:  # string case
+                if not specialties.strip():
+                    raise ValueError("Specialty string cannot be empty")
 
             cursor.execute(
                 'INSERT INTO users (username, email, specialties) VALUES (?, ?, ?)',
@@ -190,7 +198,7 @@ class User:
         Raises:
             ValueError: Specialty cannot be empty
         """
-        if not specialty or specialty == '':
+        if not isinstance(specialty, str) or not specialty.strip():
             raise ValueError("Specialty cannot be empty")
         if specialty in self.specialties:
             self.specialties.remove(specialty)
