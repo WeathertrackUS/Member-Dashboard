@@ -27,4 +27,9 @@ def download_asset(filename):
         return jsonify({"error": "Not Implemented"}), 501
     except Exception as e:
         logger.error("Error downloading asset %s: %s", filename, str(e))
-        return jsonify({"error": "File not found"}), 404
+        if isinstance(e, FileNotFoundError):
+            return jsonify({"error": "Asset directory not found"}), 404
+        elif isinstance(e, PermissionError):
+            return jsonify({"error": "Permission denied accessing assets"}), 403
+        else:
+            return jsonify({"error": "Internal server error"}), 500

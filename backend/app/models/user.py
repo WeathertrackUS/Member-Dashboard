@@ -171,7 +171,7 @@ class User:
         Raises:
             ValueError: Specialty cannot be empty
         """
-        if not specialty or specialty == '':
+        if not isinstance(specialty, str) or not specialty.strip():
             raise ValueError("Specialty cannot be empty")
         if specialty not in self.specialties:
             self.specialties.append(specialty)

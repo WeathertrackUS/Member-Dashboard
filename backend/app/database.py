@@ -17,7 +17,10 @@ def get_db(db_path='wtus_team_system.db'):
 
 @contextmanager
 def db_connection():
-    """Context manager for database connections.
+    """Create a database connection and commit or rollback changes.
+
+    Raises:
+        e: Any exception that occurs during the database transaction.
 
     Yields:
         conn: A connection to the SQLite database.
