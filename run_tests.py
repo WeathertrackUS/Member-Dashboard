@@ -25,5 +25,6 @@ def run_tests():
     # Generate HTML report
     cov.html_report(directory='coverage_html')
 
+
 if __name__ == '__main__':
     run_tests()
