@@ -55,7 +55,7 @@ def create_app():
         Returns:
             json: A JSON response with a welcome message.
         """
-        return jsonify({'message': 'Welcome to WTUS Team System API'})
+        return jsonify({'message': 'Welcome to the WTUS Team System API'})
 
     # Error handlers
     @app.errorhandler(404)
@@ -79,7 +79,7 @@ def create_app():
             error (string): The error that occurred.
 
         Returns:
-            json: A JSON response with an error message.
+            json: A JSON response with a error message.
         """
         logger.error("500 Error: %s", error)
         return jsonify({'error': 'Internal server error'}), 500
