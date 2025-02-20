@@ -5,14 +5,14 @@ import os
 class TestApp(unittest.TestCase):
     def setUp(self):
         # Store original env var
-        self.original_flask_env = os.getenv('FLASK_ENV')
+        self.original_flask_debug = os.getenv('FLASK_DEBUG')
 
     def tearDown(self):
         # Restore original env var
-        if self.original_flask_env:
-            os.environ['FLASK_ENV'] = self.original_flask_env
+        if self.original_flask_debug:
+            os.environ['FLASK_DEBUG'] = self.original_flask_debug
         else:
-            os.environ.pop('FLASK_ENV', None)
+            os.environ.pop('FLASK_DEBUG', None)
 
     def test_create_app_development(self):
         os.environ['FLASK_DEBUG'] = '1'
@@ -25,7 +25,7 @@ class TestApp(unittest.TestCase):
         self.assertFalse(app.debug)
 
     def test_create_app_no_env(self):
-        if 'FLASK_ENV' in os.environ:
+        if 'FLASK_DEBUG' in os.environ:
             del os.environ['FLASK_DEBUG']
         app = create_app()
         self.assertFalse(app.debug)
