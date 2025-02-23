@@ -1,5 +1,3 @@
-# wtus-team-system/wtus-team-system/README.md
-
 # WTUS Team System
 
 Welcome to the WTUS Team System project! This application is designed to facilitate team collaboration by providing features for scheduling, task management, and file sharing.
@@ -70,20 +68,3 @@ wtus-team-system
   ```
   npm start
   ```
-
-## Hosting Options
-
-For hosting the application, consider the following options:
-
-- **Heroku**: Offers a free tier for hosting applications.
-- **Vercel**: Great for frontend applications with easy deployment.
-- **GitHub Pages**: Suitable for static frontend hosting.
-- **DigitalOcean**: Affordable VPS options for backend hosting.
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
