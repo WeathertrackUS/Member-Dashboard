@@ -22,4 +22,5 @@
 - [ ] Ensure PR is concise and not excessive
 - [ ] Ensure all tests pass (if applicable)
 - [ ] Update documentation for new and changed code
+- [ ] Pass reviews/ checks from Coderabbit and Deepsource
 - [ ] Code review by at least one other team member
