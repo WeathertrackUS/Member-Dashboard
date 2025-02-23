@@ -1,23 +1,23 @@
 <!-- Contact WeatherboySuper if you need assistance filling this out -->
 
-## Summary:
+## Summary
 <!-- A brief summary of what the PR does -->
 
-## Related Issues:
+## Related Issues
 <!-- List any related issues or tickets (e.g., "Closes #123") -->
 
-## Changes:
+## Changes
 <!-- A detailed list of changes made in the PR -->
 - 
 
-## Testing:
+## Testing
 <!-- Instructions on how to test the changes -->
 1. 
 
-## Screenshots (if applicable):
+## Screenshots (if applicable)
 <!-- Include screenshots or GIFs if the PR changes the UI -->
 
-## Checklist:
+## Checklist
 <!-- A checklist to ensure all necessary steps are completed -->
 - [ ] Ensure PR is concise and not excessive
 - [ ] Ensure all tests pass (if applicable)
