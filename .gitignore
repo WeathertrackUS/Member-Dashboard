@@ -20,6 +20,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+/.venv
 
 # Virtual Environment
 venv/
@@ -53,3 +54,15 @@ Thumbs.db
 
 # Project specific
 hosting-options.md
+
+# Coverage reports
+.coverage
+coverage.xml
+/coverage_html
+
+# Database
+wtus_team_system.db
+
+# Logs
+logs/
+*.log
