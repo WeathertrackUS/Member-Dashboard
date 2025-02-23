@@ -1,5 +1,5 @@
 ---
-name: 'Roadmap '
+name: 'Roadmap'
 about: Template for a Roadmap issue
 title: "[ROADMAP]"
 labels: ''
