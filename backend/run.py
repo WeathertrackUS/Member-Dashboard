@@ -6,7 +6,6 @@ from backend.config import Config
 
 def create_app():
     """Create a new Flask Application"""
-
     # Initialize Flask
     app = Flask(__name__)
 
