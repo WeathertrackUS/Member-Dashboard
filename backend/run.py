@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import logging
 
-from backend.config import Config
+from config import Config
 
 def create_app():
     """
@@ -58,6 +58,20 @@ def create_app():
         """
         logger.error("500 Error: %s", error)
         return jsonify ({'error': '500 - Internal Server Error'}), 500
+
+    @app.route('/api/testing/exception/<int:user_id>')
+    def test_exception(user_id):
+        """Test a 500 Error by raising an Exception
+
+        Args:
+            user_id (int): User ID
+
+        Returns:
+            json: A JSON response with a 500 error message
+        """
+        if not isinstance(user_id, int):
+            raise TypeError("Invalid User ID")
+        raise Exception("Database connection failed")
 
     return app
 
