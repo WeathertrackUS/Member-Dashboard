@@ -4,6 +4,7 @@ import logging
 
 from config import Config
 
+
 def create_app():
     """
     Create a new Flask Application
@@ -74,6 +75,7 @@ def create_app():
         raise Exception("Database connection failed")
 
     return app
+
 
 if __name__ == '__main__':
     flask_app = create_app()

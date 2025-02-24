@@ -1,6 +1,7 @@
 import unittest
 from backend.run import create_app
 
+
 class TestFlaskApp(unittest.TestCase):
     def setUp(self):
         """Setup the Test Client"""
@@ -32,5 +33,6 @@ class TestFlaskApp(unittest.TestCase):
             response = client.get('/error')
             self.assertEqual(response.status_code, 500)
             self.assertIn(b'500 - Internal Server Error', response.data)
+
 if __name__ == '__main__':
     unittest.main()
