@@ -6,7 +6,13 @@ class TestFlaskApp(unittest.TestCase):
         """Setup the Test Client"""
         self.app = create_app()
         self.app.config['TESTING'] = True
+        self.app.config['PROPAGATE_EXCEPTIONS'] = False  # Prevent exceptions from propagating
         self.client = self.app.test_client()
+
+        @self.app.route('/error')
+        def error_route():
+            # This will trigger the 500 error handler we defined in run.py
+            raise Exception("Test Exception")
         
     def test_index_route(self):
         """Test the Index Route"""
@@ -22,13 +28,9 @@ class TestFlaskApp(unittest.TestCase):
     
     def test_500_error(self):
         """Test the 500 Error Handler"""
-        @self.app.route('/error')
-        def error_route():
-            raise Exception('Test Exception')
-
-        response = self.client.get('/error')
-        self.assertEqual(response.status_code, 500)
-        self.assertIn(b'500 - Internal Server Error', response.data)
-
+        with self.client as client:
+            response = client.get('/error')
+            self.assertEqual(response.status_code, 500)
+            self.assertIn(b'500 - Internal Server Error', response.data)
 if __name__ == '__main__':
     unittest.main()
