@@ -14,19 +14,24 @@ class TestFlaskApp(unittest.TestCase):
         def error_route():
             # This will trigger the 500 error handler we defined in run.py
             raise Exception("Test Exception")
-        
+
+    def test_cors_header(self):
+        """Test the CORS Header"""
+        response = self.client.get('/')
+        self.assertIn('Access-Control-Allow-Origin', response.headers)
+
     def test_index_route(self):
         """Test the Index Route"""
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Welcome to the WTUS Team System API', response.data)
-    
+
     def test_404_error(self):
         """Test the 404 Error Handler"""
         response = self.client.get('/doesnotexist')
         self.assertEqual(response.status_code, 404)
         self.assertIn(b'404 - Page Not Found', response.data)
-    
+
     def test_500_error(self):
         """Test the 500 Error Handler"""
         with self.client as client:
