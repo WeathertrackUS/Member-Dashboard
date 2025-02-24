@@ -64,6 +64,9 @@ def create_app():
         Returns:
             json: A JSON response with a 500 error message
         """
+        if not Config.DEBUG:
+            raise Exception("This route is only available in DEBUG mode")
+
         if not isinstance(user_id, int):
             raise TypeError("Invalid User ID")
         raise Exception("Database connection failed")
