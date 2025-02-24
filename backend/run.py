@@ -1,11 +1,27 @@
 from flask import Flask
-from config import Config
+from flask_cors import CORS
+import logging
+
+from backend.config import Config
 
 def create_app():
+    """
+    Create a new Flask Application
+    """
+
+    # Initialize Flask
     app = Flask(__name__)
     
-    # Load configuration
-    app.config.from_object('config')
+    # Enable CORS
+    CORS(app)
+
+    # Load Configurations
+    app.config.from_object(Config)
+
+    # Configure Logging
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler())
 
     return app
 
