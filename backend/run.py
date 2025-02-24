@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 import logging
 
@@ -22,6 +22,42 @@ def create_app():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler())
+
+    # Basic Index Route
+    @app.route('/')
+    def index():
+        """Basic Index Route
+
+        Returns:
+            json: A JSON response with a welcome message
+        """
+        return jsonify({'message': 'Welcome to the WTUS Team System API'})
+
+    @app.errorhandler(404)
+    def not_found(error):
+        """Error Handler for 404
+
+        Args:
+            error (string): Error message
+
+        Returns:
+            json: A JSON response with a 404 error message
+        """
+        logger.error("404 Error: %s", error)
+        return jsonify ({'error': '404 - Page Not Found'}), 404
+
+    @app.errorhandler(500)
+    def internal_error(error):
+        """Error Handler for 500
+
+        Args:
+            error (string): Error message
+
+        Returns:
+            json: A JSON response with a 500 error message
+        """
+        logger.error("500 Error: %s", error)
+        return jsonify ({'error': '500 - Internal Server Error'}), 500
 
     return app
 
