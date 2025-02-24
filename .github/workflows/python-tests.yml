@@ -40,7 +40,7 @@ jobs:
 
             - name: Run tests
               run: | 
-                coverage run --source=backend -m unittest discover -s backend/tests -p '*_test.py'
+                coverage run --source=backend -m unittest discover -s tests -p '*_test.py'
                 coverage xml -o coverage.xml
 
             - name: DeepSource Test Coverage
