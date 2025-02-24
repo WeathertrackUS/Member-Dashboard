@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 import logging
 
 from backend.config import Config
@@ -8,6 +9,16 @@ def create_app():
     """Create a new Flask Application"""
     # Initialize Flask
     app = Flask(__name__)
+
+    # Enable and Configure CORS
+    CORS(app)
+    CORS(app, resources={
+        r"/*": {
+            "origins": Config.ALLOWED_ORIGINS,
+            "methods": ["GET", "POST", "PUT", "DELETE"],
+            "allow_headers": ["Authorization", "Content-Type"]
+        }
+    })
 
     # Load Configurations
     app.config.from_object(Config)
