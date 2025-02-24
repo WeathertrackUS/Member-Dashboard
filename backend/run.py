@@ -6,9 +6,7 @@ from config import Config
 
 
 def create_app():
-    """
-    Create a new Flask Application
-    """
+    """Create a new Flask Application"""
 
     # Initialize Flask
     app = Flask(__name__)
@@ -45,7 +43,7 @@ def create_app():
             json: A JSON response with a 404 error message
         """
         logger.error("404 Error: %s", error)
-        return jsonify ({'error': '404 - Page Not Found'}), 404
+        return jsonify({'error': '404 - Page Not Found'}), 404
 
     @app.errorhandler(500)
     def internal_error(error):
@@ -58,7 +56,7 @@ def create_app():
             json: A JSON response with a 500 error message
         """
         logger.error("500 Error: %s", error)
-        return jsonify ({'error': '500 - Internal Server Error'}), 500
+        return jsonify({'error': '500 - Internal Server Error'}), 500
 
     @app.route('/api/testing/exception/<int:user_id>')
     def test_exception(user_id):
