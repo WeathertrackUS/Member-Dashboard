@@ -1,5 +1,4 @@
 from flask import Flask, jsonify
-from flask_cors import CORS
 import logging
 
 from backend.config import Config
@@ -10,9 +9,6 @@ def create_app():
 
     # Initialize Flask
     app = Flask(__name__)
-    
-    # Enable CORS
-    CORS(app)
 
     # Load Configurations
     app.config.from_object(Config)
