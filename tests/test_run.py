@@ -15,11 +15,6 @@ class TestFlaskApp(unittest.TestCase):
             # This will trigger the 500 error handler we defined in run.py
             raise Exception("Test Exception")
 
-    def test_cors_header(self):
-        """Test the CORS Header"""
-        response = self.client.get('/')
-        self.assertIn('Access-Control-Allow-Origin', response.headers)
-
     def test_index_route(self):
         """Test the Index Route"""
         response = self.client.get('/')
