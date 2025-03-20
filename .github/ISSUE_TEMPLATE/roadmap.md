@@ -1,5 +1,5 @@
 ---
-name: 'Roadmap'
+name: "Roadmap"
 about: Template for a Roadmap issue
 title: "[ROADMAP]"
 labels: ''
@@ -8,10 +8,10 @@ assignees: ''
 ---
 
 ## Description
-<!--Provide a description of the change-->
+<!--Provide a detailed description of the proposed change or feature-->
 
 ## Purpose
-<!--Describe the purpose of this change-->
+<!--Explain why this change is necessary and what problem it solves-->
 
 ## Additional Information
-<!--Provide as much information as possible as to the possible solution or anything else relating to the issue-->
+<!--Provide details about the solution or any relevant context-->
