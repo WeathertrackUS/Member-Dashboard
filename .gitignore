@@ -22,7 +22,7 @@ wheels/
 *.egg
 
 # Virtual Environment
-venv/
+.venv/
 ENV/
 
 # IDEs
@@ -54,5 +54,14 @@ Thumbs.db
 # Personal Documents
 docs/personal-docs/*
 
+# Coverage reports
+.coverage
+coverage.xml
+/coverage_html
+
 # Database
 wtus_team_system.db
+
+# Logs
+logs/
+*.log
