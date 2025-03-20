@@ -1,4 +1,4 @@
-<!-- Contact WeatherboySuper if you need assistance filling this out -->
+<!-- Contact a team member or refer to the contribution guidelines if you need assistance filling this out -->
 
 ## Summary
 <!-- A brief summary of what the PR does -->
@@ -9,16 +9,19 @@
 
 
 ## Changes
-<!-- A detailed list of changes made in the PR -->
-- 
+<!-- A detailed list of changes made in the PR
+Example:
+- Updated the weather data processing logic to improve accuracy.
+- Fixed a bug in the temperature conversion function.-->
 
 ## Testing
-<!-- Instructions on how to test the changes -->
-1. 
+<!-- Example:
+1. Run the application and verify that the new feature works as expected.
+2. Check for any errors or warnings in the console during execution.
+3. If applicable, run automated tests to ensure no regressions.-->
 
 ## Screenshots (if applicable)
-<!-- Include screenshots or GIFs if the PR changes the UI -->
-
+<!-- Include screenshots or GIFs if the PR changes the UI. For example, provide screenshots for UI updates, visual bug fixes, or design changes. -->
 
 ## Checklist
 <!-- A checklist to ensure all necessary steps are completed -->
