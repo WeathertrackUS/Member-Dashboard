@@ -22,8 +22,8 @@
 
 ## Checklist
 <!-- A checklist to ensure all necessary steps are completed -->
-- [ ] Ensure PR is concise and not excessive
+- [ ] Ensure PR is concise and not excessive (If Possible)
 - [ ] Ensure all tests pass (if applicable)
 - [ ] Update documentation for new and changed code
-- [ ] Pass reviews/ checks from Coderabbit and Deepsource
+- [ ] Pass reviews/ checks from Deepsource and Copilot
 - [ ] Code review by at least one other team member
