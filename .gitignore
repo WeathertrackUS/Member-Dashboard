@@ -51,5 +51,8 @@ yarn-error.log*
 ehthumbs.db
 Thumbs.db
 
-# Project specific
-hosting-options.md
+# Personal Documents
+docs/personal-docs/*
+
+# Database
+wtus_team_system.db
