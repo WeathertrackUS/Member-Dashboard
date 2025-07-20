@@ -39,13 +39,13 @@ jobs:
                 fi
 
             - name: Run tests
-              if: steps.check_tests.outputs.text_exist == 'true'
+              if: steps.check_tests.outputs.tests_exist == 'true'
               run: |
                 coverage run --source=backend -m unittest discover -s tests -p '*_test.py'
                 coverage xml -o coverage.xml
 
             - name: DeepSource Test Coverage
-              if: steps.check_tests.outputs.text_exist == 'true'
+              if: steps.check_tests.outputs.tests_exist == 'true'
               uses: deepsourcelabs/test-coverage-action@master
               with:
                   key: python
