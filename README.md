@@ -14,6 +14,21 @@ Welcome to the WTUS Team System project! This application is designed to facilit
   - Due dates
   - Comment/discussion board for each task
 
+## Documentation
+
+Comprehensive documentation is available in the `docs` directory:
+
+- [Project Overview](docs/project-overview.md)
+- [Backend Architecture](docs/backend-architecture.md)
+- [Frontend Architecture](docs/frontend-architecture.md)
+- [Database Schema](docs/database-schema.md)
+- [API Documentation](docs/api-documentation.md)
+- [Deployment Guide](docs/deployment-guide.md)
+- [Contribution Guide](docs/contribution-guide.md)
+- [Code Structure](docs/code-structure.md)
+- [Troubleshooting Guide](docs/troubleshooting-guide.md)
+- [Security Best Practices](docs/security-best-practices.md)
+
 ## Project Structure
 
 ```
@@ -27,7 +42,14 @@ wtus-team-system
 │   ├── src
 │   ├── package.json
 │   └── index.html
+├── docs
+│   ├── project-overview.md
+│   ├── backend-architecture.md
+│   └── ... (other documentation files)
 ├── .gitignore
+├── LICENSE
+├── CONTRIBUTING.md
+├── Security.md
 └── README.md
 ```
 
@@ -35,8 +57,8 @@ wtus-team-system
 
 ### Prerequisites
 
-- Python 3.x
-- Node.js and npm
+- Python 3.9+
+- Node.js 14+ and npm
 
 ### Installation
 
@@ -68,3 +90,15 @@ wtus-team-system
   ```
   npm start
   ```
+
+## Security
+
+Please see our [Security Policy](Security.md) for information about reporting vulnerabilities and our security practices.
+
+## Contributing
+
+We welcome contributions to the WTUS Team System! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

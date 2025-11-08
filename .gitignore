@@ -51,7 +51,7 @@ yarn-error.log*
 ehthumbs.db
 Thumbs.db
 
-# Project specific
+# Personal Documents
 docs/personal-docs/*
 
 # Coverage reports
