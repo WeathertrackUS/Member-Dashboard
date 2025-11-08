@@ -52,7 +52,7 @@ ehthumbs.db
 Thumbs.db
 
 # Project specific
-hosting-options.md
+docs/personal-docs/*
 
 # Coverage reports
 .coverage
